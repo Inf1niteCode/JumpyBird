@@ -1,13 +1,15 @@
 // Импорт необходимых модулей из Cocos Creator
 import {
-  _decorator,   // Декораторы Cocos (для классов и свойств)
-  Canvas,       // Компонент Canvas (основной UI-контейнер сцены)
-  Component,    // Базовый класс для всех компонентов
-  director,     // Управление сценами
-  Node,         // Узел сцены
-  UITransform,  // Компонент для работы с размерами UI
-  Vec3,         // Класс для 3D-вектора (позиция, масштаб и т.д.)
+  _decorator, // Декораторы Cocos (для классов и свойств)
+  Canvas, // Компонент Canvas (основной UI-контейнер сцены)
+  Component, // Базовый класс для всех компонентов
+  director, // Управление сценами
+  Node, // Узел сцены
+  UITransform, // Компонент для работы с размерами UI
+  Vec3, // Класс для 3D-вектора (позиция, масштаб и т.д.)
 } from "cc";
+
+import { GameCtrl } from "./GameCtrl";
 
 // Деструктурируем декораторы
 const { ccclass, property } = _decorator;
@@ -15,7 +17,6 @@ const { ccclass, property } = _decorator;
 // Регистрируем класс как компонент Cocos
 @ccclass("Ground")
 export class Ground extends Component {
-
   // Свойство для первого куска земли (назначается в инспекторе)
   @property({
     type: Node,
@@ -48,7 +49,8 @@ export class Ground extends Component {
   public tempStartLocation3 = new Vec3();
 
   // Скорость движения земли (пикселей в секунду)
-  public gameSpeed: number = 50;
+  public gameCtrlSpeed = new GameCtrl();
+  public gameSpeed: number;
 
   // Метод вызывается при загрузке компонента
   onLoad(): void {
@@ -80,6 +82,8 @@ export class Ground extends Component {
 
   // Метод update вызывается каждый кадр
   update(deltaTime: number) {
+    // Получаем скорость из GameCtrl
+    this.gameSpeed = this.gameCtrlSpeed.speed;
 
     // Получаем текущие позиции сегментов
     this.tempStartLocation1 = this.ground1.position;
