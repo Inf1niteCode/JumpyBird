@@ -18,6 +18,7 @@ import { Ground } from "./Ground";
 import { Result } from "./Result";
 import { Bird } from "./Bird";
 import { PipePool } from "./PipePool";
+import { BirdAudio } from "./BirdAudio";
 
 @ccclass("GameCtrl")
 export class GameCtrl extends Component {
@@ -38,6 +39,11 @@ export class GameCtrl extends Component {
     tooltip: "this is bird",
   })
   public bird: Bird;
+
+  @property({
+    type: BirdAudio,
+  })
+  public clip: BirdAudio;
 
   @property({
     type: PipePool,
@@ -64,7 +70,6 @@ export class GameCtrl extends Component {
   }
 
   initListener() {
-    // input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
     this.node.on(Node.EventType.TOUCH_START, () => {
       if (this.isOver == true) {
         this.resetGame();
@@ -74,24 +79,10 @@ export class GameCtrl extends Component {
 
       if (this.isOver == false) {
         this.bird.fly();
+        this.clip.onAudioQueue(0);
       }
     });
   }
-  // //testing keyboard input, will be removed in the future
-  // onKeyDown(event: EventKeyboard) {
-  //   switch (event.keyCode) {
-  //     case KeyCode.KEY_A:
-  //       this.gameOver();
-  //       break;
-  //     case KeyCode.KEY_P:
-  //       this.result.addScore();
-  //       break;
-  //     case KeyCode.KEY_Q:
-  //       this.resetGame();
-  //       this.bird.resetBird();
-  //       break;
-  //   }
-  // }
 
   startGame() {
     this.result.hideResult();
@@ -100,6 +91,7 @@ export class GameCtrl extends Component {
   gameOver() {
     this.result.showResult();
     this.isOver = true;
+    this.clip.onAudioQueue(3);
     director.pause();
   }
   resetGame() {
@@ -110,6 +102,7 @@ export class GameCtrl extends Component {
   }
   passPipe() {
     this.result.addScore();
+    this.clip.onAudioQueue(1);
   }
 
   createPipe() {
@@ -130,6 +123,7 @@ export class GameCtrl extends Component {
     contact: IPhysics2DContact,
   ) {
     this.bird.hitSomething = true;
+    this.clip.onAudioQueue(2);
   }
 
   birdStruck() {
