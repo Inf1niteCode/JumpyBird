@@ -6,6 +6,7 @@ import {
   Vec3,
   tween,
   Animation,
+  screen,
 } from "cc";
 const { ccclass, property } = _decorator;
 
@@ -60,5 +61,7 @@ export class Bird extends Component {
       .start();
 
     this.birdAnimation.play();
+
+    console.log(screen)
   }
 }
